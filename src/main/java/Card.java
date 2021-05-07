@@ -24,4 +24,15 @@ public class Card {
         this.rank = rank;
     }
 
+    public String cardName(){
+        return String.format("%s of %s", this.rank,this.suit);
+    }
+
+    public int cardValue(){
+        return this.rank.getValue();
+    }
+
+    public int cardSecondValue(){
+        return this.rank.getSecondValue();
+    }
 }

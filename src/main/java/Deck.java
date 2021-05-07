@@ -23,4 +23,8 @@ public class Deck {
     public int countDeck() {
         return this.cards.size();
     }
+
+    public Card dealCard() {
+        return this.cards.remove(0);
+    }
 }

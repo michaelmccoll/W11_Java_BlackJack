@@ -10,11 +10,17 @@ public class DeckTest {
     @Before
     public void setUp(){
         deck1 = new Deck();
+        deck1.createNewDeck();
     }
 
     @Test
     public void canCreateNewDeck(){
-        deck1.createNewDeck();
         assertEquals(52,deck1.countDeck());
+    }
+
+    @Test
+    public void canDealOneCard(){
+        deck1.dealCard();
+        assertEquals(51, deck1.countDeck());
     }
 }
