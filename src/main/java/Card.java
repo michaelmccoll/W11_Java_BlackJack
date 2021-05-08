@@ -32,7 +32,4 @@ public class Card {
         return this.rank.getValue();
     }
 
-    public int cardSecondValue(){
-        return this.rank.getSecondValue();
-    }
 }

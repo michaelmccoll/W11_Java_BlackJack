@@ -6,7 +6,7 @@ public class Player {
     public String name;
     public ArrayList<Card> hand;
 
-    public Player(String name){
+    public Player(String name) {
         this.name = name;
         this.hand = new ArrayList<>();
     }
@@ -19,10 +19,6 @@ public class Player {
         this.name = name;
     }
 
-    public ArrayList<Card> getHand() {
-        return hand;
-    }
-
     public void takeCard(Card card) {
         this.hand.add(card);
     }
@@ -31,31 +27,44 @@ public class Player {
         return this.hand.size();
     }
 
-    public int handTotal(){
+    public int handTotal() {
         int total = 0;
-        for (Card card : this.hand){
+        for (Card card : this.hand) {
             total += card.cardValue();
         }
         return total;
     }
 
-    public int handTotalAce(){
-        int total = 0;
-        for (Card card : this.hand){
-            total += card.cardSecondValue();
-        }
-        return total;
+    public int handTotalMax() {
+        int maxTotal = 0;
+        for (Card card : this.hand)
+            if (card.getRank() == Rank.ACE) {
+                maxTotal = handTotal() + 10;
+            }
+        return maxTotal;
     }
 
-//
-//    public int getAllTotals() {
-//        ArrayList<Integer> totals = new ArrayList<Integer>();
-//        for (Card card : this.hand){
-//            for (Rank rank : Rank.values()){
-//            totals += card.cardValue();
-//            }
-//        }
-//    }
+    public String handTotalText() {
+        int total = 0;
+        int totalAce = 10;
+        for (Card card : this.hand) {
+            if (card.getRank() != Rank.ACE) {
+                total = handTotal();
+                return String.format("%s", total);
+            } else {
+                total = handTotal();
+                totalAce = total + totalAce;
+                return String.format("%s or %s", total, totalAce);
+            }
+        }
+        return null;
+    }
 
-
+    public String getHand() {
+        String cardsInHand = "";
+        for (Card card : this.hand){
+            cardsInHand = card.cardName();
+        }
+        return cardsInHand;
+    }
 }
