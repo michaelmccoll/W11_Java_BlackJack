@@ -5,10 +5,12 @@ public class Player {
 
     public String name;
     public ArrayList<Card> hand;
+    public String gameState;
 
     public Player(String name) {
         this.name = name;
         this.hand = new ArrayList<>();
+        this.gameState = "live";
     }
 
     public String getName() {
@@ -45,16 +47,11 @@ public class Player {
     }
 
     public String handTotalText() {
-        int total = 0;
-        int totalAce = 10;
         for (Card card : this.hand) {
-            if (card.getRank() != Rank.ACE) {
-                total = handTotal();
-                return String.format("%s", total);
+            if (card.cardValue() != 1) {
+                return String.format("%s", handTotal());
             } else {
-                total = handTotal();
-                totalAce = total + totalAce;
-                return String.format("%s or %s", total, totalAce);
+                return String.format("%s or %s", handTotal(), handTotalMax());
             }
         }
         return null;
@@ -67,4 +64,27 @@ public class Player {
         }
         return cardsInHand;
     }
+
+    public String getGameState() {
+        return gameState;
+    }
+
+    public void setGameStateToFinal() {
+        this.gameState = "finalHand";
+    }
+
+    public void setGameStateToBust() {
+        if ((handTotal() > 21) && (handTotalMax()>21)) {
+            this.gameState = "BUST!";
+        }
+    }
+
+    public int bestHand(){
+        if (this.handTotalMax() <= 21){
+            return this.handTotalMax();
+        } else {
+            return this.handTotal();
+        }
+    }
+
 }

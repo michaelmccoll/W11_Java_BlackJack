@@ -19,53 +19,44 @@ public class Runner {
         Player player1 = new Player(player1Name);
 
 //ASSIGN DEALER 2 CARDS
-        Card dealerCard1 = deck.dealCard();
-        dealer.takeCard(dealerCard1);
-        Card dealerCard2 = deck.dealCard();
-        dealer.takeCard(dealerCard2);
-        System.out.println(String.format("Lets deal. The Dealers two cards are:",player1.handTotal()));
-        System.out.println(String.format("- %s",dealerCard1.cardName()));
+        Dealer.dealCard(deck,dealer);
+        Dealer.dealCard(deck,dealer);
+        System.out.println(String.format("Lets deal. The Dealers two cards are:",dealer.handTotal()));
+        System.out.println(String.format("- %s",dealer.hand.get(0).cardName()));
         System.out.println("- UNKNOWN");
-        System.out.println(String.format("The Dealers score is at least %s",dealerCard1.cardValue()));
+        System.out.println(String.format("The Dealers score is at least %s",dealer.hand.get(0).cardValue()));
 
 //ASSIGN PLAYER1 TWO CARDS
         System.out.println(String.format("%s, here are your two cards:", player1.getName()));
-        Card card1 = deck.dealCard();
-        player1.takeCard(card1);
-        Card card2 = deck.dealCard();
-        player1.takeCard(card2);
-        System.out.println(String.format("- %s",card1.cardName()));
-        System.out.println(String.format("- %s",card2.cardName()));
+        Dealer.dealCard(deck,player1);
+        Dealer.dealCard(deck,player1);
+        System.out.println(String.format("- %s",player1.hand.get(0).cardName()));
+        System.out.println(String.format("- %s",player1.hand.get(1).cardName()));
         System.out.println(String.format("Your total is %s ",player1.handTotalText()));
 
 //PLAYER1 MOVES
-        if (player1.handTotal() == 21){
+        if ((player1.handTotal() == 21) || (player1.handTotalMax() == 21)){
             System.out.println("!!! You have 21, BLACKJACK !!!");
         } else {
-            while ((player1.handTotal() <= 21) && ((player1.handTotalMax()) <= 21)){
+            while (player1.getGameState().equals("live")){
                 System.out.println("Do you want to STICK (enter S) or TWIST (enter T)?");
                 String playerMove = scanner.next();
-                if (playerMove.equals("S")) {
+                if (playerMove.equals("S") || playerMove.equals("s")) {
+                    player1.setGameStateToFinal();
                     System.out.println("Dealers Turn");
-                    if (dealer.handTotal() <= 16){
-                        Card card = deck.dealCard();
-                        dealer.takeCard(card);
-                        System.out.println(dealer.hand);
-                        System.out.println(String.format("The Dealer total is %s ",dealer.handTotalText()));
-                    } else {
-//                        dealer sticks & work out the which hand is more Player or Dealer
+                    if (dealer.bestHand() <= 16){
+                        Dealer.dealCard(deck,dealer);
+                        dealer.setGameStateToFinal();
+                        System.out.println(String.format("The Dealer total is %s or %s",dealer.handTotal(),dealer.handTotalMax()));
                     }
-
                 } else {
-                    Card card = deck.dealCard();
-                    player1.takeCard(card);
+                    Dealer.dealCard(deck,player1);
                     System.out.println(player1.getHand());
-                    System.out.println(player1.hand);
-                    System.out.println(String.format("Your total is %s ",player1.handTotalText()));
+                    System.out.println(String.format("Your total is %s or %s",player1.handTotal(),player1.handTotalMax()));
                 }
             }
-
+            System.out.println(String.format("The winner is %s ",getResult()));
         }
 
+        }
     }
-}
